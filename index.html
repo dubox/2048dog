@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>2048 之狗拿耗子</title>
+
+ 
+ 
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
+  <!--
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js1"></script>-->
+  <link href="style/main.css" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="meta/apple-touch-icon.png">
+
+  
+  
+</head>
+<body style="width:100%;">
+
+
+
+ <script>
+ 
+ var _bwidth = window.innerWidth;
+  var _body = document.getElementsByTagName('body')[0];
+if(window.innerWidth > window.innerHeight){
+	_body.style.width = window.innerHeight*10/16+'px';
+	_bwidth = window.innerHeight*10/16;
+}
+
+  var _tilewidth=_bwidth/4-20;
+  document.write('<style>');
+  document.write('.grid-cell,.tile , .tile .tile-inner{width:'+_tilewidth+'px;height:'+_tilewidth+'px;line-height:'+(_tilewidth)+'px;font-size: '+(_tilewidth-10)+'px;}');
+  var tilep = _tilewidth+15;
+  for(var i=1;i<=4;i++){
+	
+	for(var j=1;j<=4;j++){
+		var _left = (i-1)*tilep;
+		var _top = (j-1)*tilep;
+		document.write('.tile.tile-position-'+i+'-'+j+' {-webkit-transform: translate('+_left+'px, '+_top+'px);-moz-transform: translate('+_left+'px, '+_top+'px);transform: translate('+_left+'px, '+_top+'px);}');
+  
+	}
+  
+  }
+ 
+  document.write('</style>');
+  </script>
+  <div class="container">
+    <div class="heading" style="display:none;">
+      <h3 class="title">2048 之狗拿耗子</h3>
+      <div class="scores-container">
+        <div class="score-container">0</div>
+        <div class="best-container">0</div>
+      </div>
+    </div>
+
+    <div class="above-game">
+      <a class="restart-button">2048 之狗拿耗子 STEP-<span class="step-container">0</span></a>
+    </div>
+
+    <div class="game-container" style="width:100%;height:100%;">
+	
+	
+	
+      <div class="game-message">
+        <p></p>
+        <div class="lower">
+	        <a class="share-button"  ontouchstart="document.getElementById('share').style.display='';" >share</a>
+          <a class="retry-button">Try again</a>
+        </div>
+      </div>
+
+      <div class="grid-container" style="width:100%;height:100%;">
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+      </div>
+
+      <div class="tile-container">
+
+      </div>
+    </div>
+ 
+  </div>
+  <div id="share" style="display: none">
+			<img width="100%" src="../public/images/share.png" style="position: fixed; z-index: 9999; top: 0; left: 0; display: " ontouchstart="document.getElementById('share').style.display='none';">
+		</div>
+  
+ <script>
+  
+  var g_con = document.getElementsByClassName('game-container')[0];
+  
+  g_con.style.width = g_con.style.height = _bwidth+'px';
+  </script>
+  <script src="js/bind_polyfill.js"></script>
+  <script src="js/classlist_polyfill.js"></script>
+  <script src="js/animframe_polyfill.js"></script>
+  <script src="js/keyboard_input_manager.js"></script>
+  <script src="js/html_actuator.js"></script>
+  <script src="js/grid.js"></script>
+  <script src="js/tile.js"></script>
+  <script src="js/local_storage_manager.js"></script>
+  <script src="js/game_manager.js"></script>
+  <script src="js/application.js"></script>
+ <script src="js/WeixinApi.js"></script>
+<script>
+// 微信分享的数据
+window.wxData = {
+    "appId": "", // 服务号可以填写appId
+    "imgUrl":'http://www.dubox.org/apps/meta/logo.png',
+    
+	"link": "http://www.dubox.org/apps/2048dog",
+    "desc":"继《2048猫捉老鼠》之后又一力作！",
+    "title":"2048 之狗拿耗子"
+};
+
+function share(score){
+	if(typeof score == 'number'){
+		window.wxData.desc = '我只用'+score+'步抓住了老鼠！';
+	}else{
+		window.wxData.desc = score;
+	}
+}
+WeixinApi.ready(function(Api) {
+
+    // 分享的回调
+    var wxCallbacks = {
+        ready : function() {
+			//
+        },
+
+        cancel : function(resp) {
+
+        },
+        fail : function(resp) {
+
+        },
+        confirm : function(resp) {
+
+        },
+        all : function(resp) {
+
+        }
+    };
+
+    Api.shareToFriend(wxData, wxCallbacks);
+
+    Api.shareToTimeline(wxData, wxCallbacks);
+
+    Api.shareToWeibo(wxData, wxCallbacks);
+});
+</script>
+  
+</body>
+</html>
